@@ -174,7 +174,10 @@
                     <a class="dropdown-item" href="#"><i class="align-middle me-1"
                                                          data-feather="help-circle"></i> Help Center</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Log out</a>
+                    <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit()">Log out</a>
+                    <form id="logout-form" method="post" action="{{ route('logout') }}" style="display: none;">
+                        @csrf
+                    </form>
                 </div>
             </li>
         </ul>

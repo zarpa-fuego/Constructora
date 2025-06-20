@@ -8,14 +8,14 @@
             <!-- Header con título y botones -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="h3 mb-0"><strong>Gestionar</strong> Lotes</h1>
-            <div>
-                <button class="btn btn-outline-primary me-2" onclick="exportarLotes()">
-                    <i class="align-middle" data-feather="download"></i>
-                    Exportar</button>
-                <button class="btn btn-outline-primary me-2" onclick="nuevoLote()">
-                    <i class="align-middle" data-feather="plus"></i>
-                    Nuevo Lote</button>
-            </div>
+                <div>
+                    <button class="btn btn-outline-primary me-2" onclick="exportarLotes()">
+                        <i class="align-middle" data-feather="download"></i>
+                        Exportar</button>
+                    <button class="btn btn-outline-primary me-2" onclick="nuevoLote()">
+                        <i class="align-middle" data-feather="plus"></i>
+                        Nuevo Lote</button>
+                </div>
             </div>
             <div class="row">
                 <!-- Real-Time: Visualizador de Planos PDF -->
