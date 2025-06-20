@@ -5,42 +5,84 @@
 
     <main class="content">
         <div class="container-fluid p-0">
-
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="h3 mb-3"><strong>Gestionar</strong> Lotes</h1>
+            <!-- Header con título y botones -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="h3 mb-0"><strong>Gestionar</strong> Lotes</h1>
             <div>
-                <button>Exportar</button>
-                <button>Nuevo Lote</button>
+                <button class="btn btn-outline-primary me-2" onclick="exportarLotes()">
+                    <i class="align-middle" data-feather="download"></i>
+                    Exportar</button>
+                <button class="btn btn-outline-primary me-2" onclick="nuevoLote()">
+                    <i class="align-middle" data-feather="plus"></i>
+                    Nuevo Lote</button>
             </div>
             </div>
             <div class="row">
-                <div class="col-12 col-md-6 col-xxl-3 d-flex order-2 order-xxl-3">
+                <!-- Real-Time: Visualizador de Planos PDF -->
+                <div class="col-12 col-md-8 col-xxl-9 d-flex">
+                    <div class="card flex-fill w-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Plano del proyecto</h5>
+                            <div>
+                                <button class="btn btn-sm btn-outline-secondary me-2" onclick="cargarPlano()">
+                                    <i class="align-middle" data-feather="upload"></i>
+                                    Cargar Plano
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary me-2" onclick="descargarPlano()">
+                                    <i class="align-middle" data-feather="download"></i>
+                                    Descargar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body px-4">
+                            <!-- Contenedor para el PDF -->
+                            <div id="pdf_viewer" style="height:400px; border: 1px solid #dee2e6; border-radius: 0.375rem;">
+                                <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                                    <div class="text-center">
+                                        <i data-feather="file-text" style="width: 48px; height: 48px;"></i>
+                                        <p class="mt-2">No hay plano cargado</p>
+                                        <small>Haga clic en "Cargar Plano" para subir un archivo PDF</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Browser Usage: Estadísticas de Lotes -->
+                <div class="col-12 col-md-4 col-xxl-3 d-flex">
                     <div class="card flex-fill w-100">
                         <div class="card-header">
-
-                            <h5 class="card-title mb-0">Browser Usage</h5>
+                            <h5 class="card-title mb-0">Estadisticas de Lotes</h5>
                         </div>
                         <div class="card-body d-flex">
                             <div class="align-self-center w-100">
                                 <div class="py-3">
                                     <div class="chart chart-xs">
-                                        <canvas id="chartjs-dashboard-pie"></canvas>
+                                        <canvas id="chartjs-lotes-pie"></canvas>
                                     </div>
                                 </div>
-
                                 <table class="table mb-0">
                                     <tbody>
                                     <tr>
-                                        <td>Chrome</td>
-                                        <td class="text-end">4306</td>
+                                        <td>
+                                            <span class="badge bg-success me-2"></span>
+                                            Disponibles
+                                        </td>
+                                        <td class="text-end" id="lotes-disponibles">0</td>
                                     </tr>
                                     <tr>
-                                        <td>Firefox</td>
-                                        <td class="text-end">3801</td>
+                                        <td>
+                                            <span class="badge bg-warning me-2"></span>
+                                            Reservados
+                                        </td>
+                                        <td class="text-end" id="lotes-reservados">0</td>
                                     </tr>
                                     <tr>
-                                        <td>IE</td>
-                                        <td class="text-end">1689</td>
+                                        <td>
+                                            <span class="badge bg-danger me-2"></span>
+                                            Vendidos
+                                        </td>
+                                        <td class="text-end" id="lotes-vendidos">0</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -48,127 +90,89 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
-                    <div class="card flex-fill w-100">
-                        <div class="card-header">
-
-                            <h5 class="card-title mb-0">Real-Time</h5>
-                        </div>
-                        <div class="card-body px-4">
-                            <div id="world_map" style="height:350px;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-xxl-3 d-flex order-1 order-xxl-1">
-                    <div class="card flex-fill">
-                        <div class="card-header">
-
-                            <h5 class="card-title mb-0">Calendar</h5>
-                        </div>
-                        <div class="card-body d-flex">
-                            <div class="align-self-center w-100">
-                                <div class="chart">
-                                    <div id="datetimepicker-dashboard"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+            <!-- Segunda fila: Tabla de Lotes -->
             <div class="row">
-                <div class="col-12 col-lg-8 col-xxl-9 d-flex">
+                <div class="col-12 d-flex">
                     <div class="card flex-fill">
-                        <div class="card-header">
-
-                            <h5 class="card-title mb-0">Latest Projects</h5>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Lista de Lotes</h5>
+                            <div class="d-flex">
+                                <input type="text" class="form-control me-2" placeholder="Buscar lote..." style="width: 200px;">
+                                <select class="form-select" style="width: 150px;">
+                                    <option value="">Todos</option>
+                                    <option value="disponible">Disponibles</option>
+                                    <option value="reservado">Reservados</option>
+                                    <option value="vendido">Vendidos</option>
+                                </select>
+                            </div>
                         </div>
                         <table class="table table-hover my-0">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th class="d-none d-xl-table-cell">Start Date</th>
-                                <th class="d-none d-xl-table-cell">End Date</th>
-                                <th>Status</th>
-                                <th class="d-none d-md-table-cell">Assignee</th>
+                                <th>N° Lote</th>
+                                <th class="d-none d-xl-table-cell">Manzana</th>
+                                <th class="d-none d-xl-table-cell">Área (m²)</th>
+                                <th>Estado</th>
+                                <th class="d-none d-md-table-cell">Precio</th>
+                                <th class="d-none d-md-table-cell">Cliente</th>
+                                <th>Acciones</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tabla-lotes">
                             <tr>
-                                <td>Project Apollo</td>
-                                <td class="d-none d-xl-table-cell">01/01/2023</td>
-                                <td class="d-none d-xl-table-cell">31/06/2023</td>
-                                <td><span class="badge bg-success">Done</span></td>
-                                <td class="d-none d-md-table-cell">Vanessa Tucker</td>
+                                <td>L-001</td>
+                                <td class="d-none d-xl-table-cell">A</td>
+                                <td class="d-none d-xl-table-cell">250.00</td>
+                                <td><span class="badge bg-success">Disponible</span></td>
+                                <td class="d-none d-md-table-cell">S/ 45,000</td>
+                                <td class="d-none d-md-table-cell">-</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editarLote('L-001')">
+                                        <i data-feather="edit-2"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarLote('L-001')">
+                                        <i data-feather="trash-2"></i>
+                                    </button>
+                                </td>
                             </tr>
                             <tr>
-                                <td>Project Fireball</td>
-                                <td class="d-none d-xl-table-cell">01/01/2023</td>
-                                <td class="d-none d-xl-table-cell">31/06/2023</td>
-                                <td><span class="badge bg-danger">Cancelled</span></td>
-                                <td class="d-none d-md-table-cell">William Harris</td>
+                                <td>L-002</td>
+                                <td class="d-none d-xl-table-cell">A</td>
+                                <td class="d-none d-xl-table-cell">280.00</td>
+                                <td><span class="badge bg-warning">Reservado</span></td>
+                                <td class="d-none d-md-table-cell">S/ 50,400</td>
+                                <td class="d-none d-md-table-cell">Juan Pérez</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editarLote('L-002')">
+                                        <i data-feather="edit-2"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarLote('L-002')">
+                                        <i data-feather="trash-2"></i>
+                                    </button>
+                                </td>
                             </tr>
                             <tr>
-                                <td>Project Hades</td>
-                                <td class="d-none d-xl-table-cell">01/01/2023</td>
-                                <td class="d-none d-xl-table-cell">31/06/2023</td>
-                                <td><span class="badge bg-success">Done</span></td>
-                                <td class="d-none d-md-table-cell">Sharon Lessman</td>
-                            </tr>
-                            <tr>
-                                <td>Project Nitro</td>
-                                <td class="d-none d-xl-table-cell">01/01/2023</td>
-                                <td class="d-none d-xl-table-cell">31/06/2023</td>
-                                <td><span class="badge bg-warning">In progress</span></td>
-                                <td class="d-none d-md-table-cell">Vanessa Tucker</td>
-                            </tr>
-                            <tr>
-                                <td>Project Phoenix</td>
-                                <td class="d-none d-xl-table-cell">01/01/2023</td>
-                                <td class="d-none d-xl-table-cell">31/06/2023</td>
-                                <td><span class="badge bg-success">Done</span></td>
-                                <td class="d-none d-md-table-cell">William Harris</td>
-                            </tr>
-                            <tr>
-                                <td>Project X</td>
-                                <td class="d-none d-xl-table-cell">01/01/2023</td>
-                                <td class="d-none d-xl-table-cell">31/06/2023</td>
-                                <td><span class="badge bg-success">Done</span></td>
-                                <td class="d-none d-md-table-cell">Sharon Lessman</td>
-                            </tr>
-                            <tr>
-                                <td>Project Romeo</td>
-                                <td class="d-none d-xl-table-cell">01/01/2023</td>
-                                <td class="d-none d-xl-table-cell">31/06/2023</td>
-                                <td><span class="badge bg-success">Done</span></td>
-                                <td class="d-none d-md-table-cell">Christina Mason</td>
-                            </tr>
-                            <tr>
-                                <td>Project Wombat</td>
-                                <td class="d-none d-xl-table-cell">01/01/2023</td>
-                                <td class="d-none d-xl-table-cell">31/06/2023</td>
-                                <td><span class="badge bg-warning">In progress</span></td>
-                                <td class="d-none d-md-table-cell">William Harris</td>
+                                <td>L-003</td>
+                                <td class="d-none d-xl-table-cell">A</td>
+                                <td class="d-none d-xl-table-cell">300.00</td>
+                                <td><span class="badge bg-danger">Vendido</span></td>
+                                <td class="d-none d-md-table-cell">S/ 54,000</td>
+                                <td class="d-none d-md-table-cell">María García</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editarLote('L-003')">
+                                        <i data-feather="edit-2"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                                        <i data-feather="trash-2"></i>
+                                    </button>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="col-12 col-lg-4 col-xxl-3 d-flex">
-                    <div class="card flex-fill w-100">
-                        <div class="card-header">
-
-                            <h5 class="card-title mb-0">Monthly Sales</h5>
-                        </div>
-                        <div class="card-body d-flex w-100">
-                            <div class="align-self-center chart chart-lg">
-                                <canvas id="chartjs-dashboard-bar"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-
         </div>
     </main>
-
 @endsection
