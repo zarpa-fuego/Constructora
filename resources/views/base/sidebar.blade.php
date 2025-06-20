@@ -9,7 +9,7 @@
                 Navegación
             </li>
 
-            <li class="sidebar-item active">
+            <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route('welcome')}}">
                     <i class="align-middle" data-feather="sliders"></i> <span
                         class="align-middle">Gestión de Lotes</span>
@@ -39,7 +39,8 @@
 
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route(('gestionar_pagos'))}}">
-                    <i class="align-middle" data-feather="book"></i> <span class="align-middle">Gestión de Pagos</span>
+                    <i class="align-middle" data-feather="book"></i> <span
+                        class="align-middle">Gestión de Pagos</span>
                 </a>
             </li>
 
