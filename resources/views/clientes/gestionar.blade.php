@@ -3,7 +3,7 @@
     <main class="content">
         <div class="container-fluid p-0">
 
-            <h1 class="h3 mb-3"><strong>Listar</strong> Ventas</h1>
+            <h1 class="h3 mb-3"><strong>Gestionar</strong> Clientes</h1>
             <div class="card">
                 <div class="card-header">
                     Ventana

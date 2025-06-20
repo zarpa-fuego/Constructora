@@ -17,41 +17,41 @@
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{route('listar_venta')}}">
+                <a class="sidebar-link" href="{{route('gestionar_clientes')}}">
                     <i class="align-middle" data-feather="user"></i> <span
                         class="align-middle">Gestión de Clientes</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="pages-sign-in.html">
+                <a class="sidebar-link" href="{{route('gestionar_reservas')}}">
                     <i class="align-middle" data-feather="log-in"></i> <span
                         class="align-middle">Gestión de Reservas</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="pages-sign-up.html">
+                <a class="sidebar-link" href="{{route('registro_ventas')}}">
                     <i class="align-middle" data-feather="user-plus"></i> <span
                         class="align-middle">Registro de Ventas</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="pages-blank.html">
+                <a class="sidebar-link" href="{{route(('gestionar_pagos'))}}">
                     <i class="align-middle" data-feather="book"></i> <span class="align-middle">Gestión de Pagos</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="ui-buttons.html">
+                <a class="sidebar-link" href="{{route('gestionar_usuarios')}}">
                     <i class="align-middle" data-feather="square"></i> <span
                         class="align-middle">Gestión de Usuarios</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
-                <a class="sidebar-link" href="ui-forms.html">
+                <a class="sidebar-link" href="{{route('panel_informes')}}">
                     <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Informes</span>
                 </a>
             </li>
