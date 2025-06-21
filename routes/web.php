@@ -56,7 +56,7 @@ Route::middleware('auth')->group(function () {
     */
     Route::get('/usuarios', function () {
         return view('usuarios.gestionar');
-    })->name('gestionar_usuarios');
+})->name('gestionar_usuarios');
 
     /*
     |--------------------------------------------------------------------------
