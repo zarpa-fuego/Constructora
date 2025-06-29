@@ -22,6 +22,12 @@
                         class="align-middle">Gestión de Clientes</span>
                 </a>
             </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{route('proyecto_listar')}}">
+                    <i class="align-middle" data-feather="user"></i> <span
+                        class="align-middle">Gestión de Proyectos</span>
+                </a>
+            </li>
 
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route('gestionar_reservas')}}">

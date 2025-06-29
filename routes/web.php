@@ -1,17 +1,33 @@
 <?php
 
+use App\Http\Controllers\LoteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProyectoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth','verified'])->name('dashboard');
+    return redirect()->route('proyecto_listar');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/proyectos/create', [ProyectoController::class, 'create'])->name('proyecto_crear');
+    Route::post('/proyectos/store', [ProyectoController::class, 'store'])->name('proyecto_store');
+    Route::get('/proyectos/show/{proyecto}', [ProyectoController::class, 'show'])->name('proyecto_show');
+    Route::get('/proyectos/edit/{proyecto}', [ProyectoController::class, 'edit'])->name('proyecto_edit');
+    Route::post('/proyectos/update/{proyecto}', [ProyectoController::class, 'update'])->name('proyecto_update');
+    Route::get('/proyectos/destroy/{proyecto}', [ProyectoController::class, 'destroy'])->name('proyecto_eliminar');
+    Route::get('/lotes/index/{proyecto}', [LoteController::class, 'index'])->name('lote_index');
+    Route::get('/lotes/create/{proyecto}', [LoteController::class, 'create'])->name('lote_crear');
+    Route::post('/lotes/store/{proyecto}', [LoteController::class, 'store'])->name('lote_store');
+    Route::get('/lotes/edit/{lote}', [LoteController::class, 'edit'])->name('lote_edit');
+    Route::post('/lotes/update/{lote}', [LoteController::class, 'update'])->name('lote_update');
 
-    Route::get('/venta/venta', function () {
-        return view('venta.listar');
-    })->name('listar_venta');
+    /*
+    |--------------------------------------------------------------------------
+    | Gestión de Proyectos (Nueva funcionalidad)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/proyectos', [ProyectoController::class, 'index'])->name('proyecto_listar');
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +72,7 @@ Route::middleware('auth')->group(function () {
     */
     Route::get('/usuarios', function () {
         return view('usuarios.gestionar');
-})->name('gestionar_usuarios');
+    })->name('gestionar_usuarios');
 
     /*
     |--------------------------------------------------------------------------
@@ -72,4 +88,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
