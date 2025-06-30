@@ -1,57 +1,92 @@
-@extends('base.base')
+@extends('base.base') {{-- Tu layout base --}}
+
 @section('content')
-    <div class="container-fluid py-4">
-        <div>
-            <h1>Gestión de lotes</h1>
-            <a href="{{ route('lote_crear', $proyecto->id) }}" class="btn btn-primary">Agregar</a>
+<main class="content">
+    <div class="card">
+        <div class="card-header">
+            Gestión de Clientes
+            <a href="{{ route('clientes.create') }}" class="btn btn-primary btn-sm float-end">
+                Crear Nuevo Cliente
+            </a>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <table class="table">
-                    <tr>
-                        <td>Precio</td>
-                        <td>Límite del Sur</td>
-                        <td>Límite del Norte</td>
-                        <td>Límite del Este</td>
-                        <td>Límite del Oeste</td>
-                        <td>Proyecto</td>
-                        <td>Manzana</td>
-                        <td>Sector</td>
-                        <td>Número de Lote</td>
-                        <td>Estado</td>
-                        <td>Fecha de Vendido</td>
-                        <td>Perímetro</td>
-                        <td>Área</td>
-                        <td>Opciones</td>
-                    </tr>
-                    @foreach($lotes as $lote)
-                        <tr>
-                            <td>{{ $lote->precio }}</td>
-                            <td>{{ $lote->limite_sur }}</td>
-                            <td>{{ $lote->limite_norte }}</td>
-                            <td>{{ $lote->limite_este }}</td>
-                            <td>{{ $lote->limite_oeste }}</td>
-                            <td>{{ $lote->proyecto->nombre }}</td>
-                            <td>{{ $lote->manzana }}</td>
-                            <td>{{ $lote->sector }}</td>
-                            <td>{{ $lote->nro_lote }}</td>
-                            <td>{{ $lote->estado }}</td>
-                            <td>{{ $lote->fecha_vendido }}</td>
-                            <td>{{ $lote->perimetro }}</td>
-                            <td>{{ $lote->area }}</td>
-                            <td>
-                                <a href="/lotes/show/{{$lote->id}}">Ver</a>
-                                <a href="/lotes/edit/{{$lote->id}}">Editar</a>
-                                <a href="/lotes/destroy/{{$lote->id}}">Eliminar</a>
+        <div class="card-body">
+            {{-- Mostrar mensajes de éxito --}}
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
 
-                            </td>
-                        </tr>
-                    @endforeach
+            {{-- Mostrar mensajes de error --}}
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
 
-                </table>
-            </div>
+            @if ($clientes->isEmpty())
+                <div class="alert alert-info">
+                    No hay clientes registrados.
+                </div>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre Completo</th>
+                                <th>DNI</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Distrito</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($clientes as $cliente)
+                            <tr>
+                                <td>{{ $cliente->id }}</td>
+                                <td>{{ $cliente->nombre }} {{ $cliente->apellido }}</td>
+                                <td>{{ $cliente->dni_numero }}</td>
+                                <td>{{ $cliente->email }}</td>
+                                <td>{{ $cliente->telefono }}</td>
+                                <td>{{ $cliente->distrito->nombre ?? 'N/A' }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('clientes.show', $cliente->id) }}"
+                                           class="btn btn-info btn-sm" title="Ver detalles">
+                                            Ver
+                                        </a>
+                                        <a href="{{ route('clientes.edit', $cliente->id) }}"
+                                           class="btn btn-warning btn-sm" title="Editar cliente">
+                                            Editar
+                                        </a>
+                                        <form action="{{ route('clientes.destroy', $cliente->id) }}"
+                                              method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                    title="Eliminar cliente"
+                                                    onclick="return confirm('¿Estás seguro de querer eliminar este cliente?\n\nCliente: {{ $cliente->nombre }} {{ $cliente->apellido }}\nDNI: {{ $cliente->dni_numero }}\n\nEsta acción es irreversible.')">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Enlaces de paginación --}}
+                <div class="d-flex justify-content-center">
+                    {{ $clientes->links() }}
+                </div>
+            @endif
         </div>
     </div>
-
-
+</main>
 @endsection

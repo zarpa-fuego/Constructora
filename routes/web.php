@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProyectoController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,12 +11,25 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Gestión de Proyectos
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/proyectos', [ProyectoController::class, 'index'])->name('proyecto_listar');
     Route::get('/proyectos/create', [ProyectoController::class, 'create'])->name('proyecto_crear');
     Route::post('/proyectos/store', [ProyectoController::class, 'store'])->name('proyecto_store');
     Route::get('/proyectos/show/{proyecto}', [ProyectoController::class, 'show'])->name('proyecto_show');
     Route::get('/proyectos/edit/{proyecto}', [ProyectoController::class, 'edit'])->name('proyecto_edit');
     Route::post('/proyectos/update/{proyecto}', [ProyectoController::class, 'update'])->name('proyecto_update');
     Route::get('/proyectos/destroy/{proyecto}', [ProyectoController::class, 'destroy'])->name('proyecto_eliminar');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Gestión de Lotes
+    |--------------------------------------------------------------------------
+    */
     Route::get('/lotes/index/{proyecto}', [LoteController::class, 'index'])->name('lote_index');
     Route::get('/lotes/create/{proyecto}', [LoteController::class, 'create'])->name('lote_crear');
     Route::post('/lotes/store/{proyecto}', [LoteController::class, 'store'])->name('lote_store');
@@ -24,19 +38,19 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Gestión de Proyectos (Nueva funcionalidad)
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/proyectos', [ProyectoController::class, 'index'])->name('proyecto_listar');
-
-    /*
-    |--------------------------------------------------------------------------
     | Gestión de Clientes
     |--------------------------------------------------------------------------
     */
-    Route::get('/clientes', function () {
-        return view('clientes.gestionar');
-    })->name('gestionar_clientes');
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
+    Route::get('/clientes/create', [ClienteController::class, 'create'])->name('clientes.create');
+    Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');
+    Route::get('/clientes/{cliente}', [ClienteController::class, 'show'])->name('clientes.show');
+    Route::get('/clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
+    Route::put('/clientes/{cliente}', [ClienteController::class, 'update'])->name('clientes.update');
+    Route::delete('/clientes/{cliente}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
+
+    Route::get('/clientes/search', [ClienteController::class, 'search'])->name('clientes.search');
+Route::get('/clientes/export', [ClienteController::class, 'export'])->name('clientes.export');
 
     /*
     |--------------------------------------------------------------------------
@@ -83,6 +97,11 @@ Route::middleware('auth')->group(function () {
         return view('informes.panel');
     })->name('panel_informes');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Perfil de Usuario
+    |--------------------------------------------------------------------------
+    */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
