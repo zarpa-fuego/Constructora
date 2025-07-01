@@ -51,3 +51,9 @@ class UbicacionSeeder extends Seeder
                 'nombre' => $distrito,
                 'provincia_id' => $provinciaLima->id
             ]);
+
+        }
+    }
+
+}
+

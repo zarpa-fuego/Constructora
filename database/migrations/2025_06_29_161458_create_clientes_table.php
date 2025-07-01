@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id(); // id_cliente
-            $table->string('estado_civil', 10);
+            $table->string('estado_civil', 20);
             $table->string('nombre', 120);
             $table->string('apellido', 180);
             $table->foreignId('distrito_id')->constrained('distritos')->onDelete('cascade'); // FK a distrito, añadido onDelete
