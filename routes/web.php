@@ -41,11 +41,6 @@ Route::middleware('auth')->group(function () {
     | Gestión de Clientes
     |--------------------------------------------------------------------------
     */
-<<<<<<< HEAD
-    Route::get('/clientes', function    () {
-        return view('cliente.index');
-    })->name('gestionar_clientes');
-=======
     Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
     Route::get('/clientes/create', [ClienteController::class, 'create'])->name('clientes.create');
     Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');
@@ -55,8 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/clientes/{cliente}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
 
     Route::get('/clientes/search', [ClienteController::class, 'search'])->name('clientes.search');
-Route::get('/clientes/export', [ClienteController::class, 'export'])->name('clientes.export');
->>>>>>> c9fd628b3ff62f2610b393ab1417eb8cd8f12007
+    Route::get('/clientes/export', [ClienteController::class, 'export'])->name('clientes.export');
 
     /*
     |--------------------------------------------------------------------------
@@ -105,19 +99,9 @@ Route::get('/clientes/export', [ClienteController::class, 'export'])->name('clie
 
     /*
     |--------------------------------------------------------------------------
-<<<<<<< HEAD
-    | Cajeras
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/cajeras', function () {
-        return view('cajera.index');
-    })->name('gestionar_cajeras');
-
-=======
     | Perfil de Usuario
     |--------------------------------------------------------------------------
     */
->>>>>>> c9fd628b3ff62f2610b393ab1417eb8cd8f12007
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
