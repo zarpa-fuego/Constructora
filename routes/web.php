@@ -4,6 +4,8 @@ use App\Http\Controllers\LoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProyectoController;
+use App\Http\Controllers\RegistroVisitaController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function () {
@@ -79,14 +81,27 @@ Route::middleware('auth')->group(function () {
         return view('pagos.gestionar');
     })->name('gestionar_pagos');
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Gestión de Visitas
+    |--------------------------------------------------------------------------
+    */
+
+
+    Route::get('/visitas', [RegistroVisitaController::class, 'index'])->name('visitas.index');
+    Route::get('/visitas/{visita}', [RegistroVisitaController::class, 'destroy'])->name('visitas.destroy');
+    Route::post('/visitas/store', [RegistroVisitaController::class, 'store'])->name('visitas.store');
+
     /*
     |--------------------------------------------------------------------------
     | Gestión de Usuarios
     |--------------------------------------------------------------------------
     */
-    Route::get('/usuarios', function () {
-        return view('usuarios.gestionar');
-    })->name('gestionar_usuarios');
+
+
+    Route::resource('usuarios', UsuarioController::class);
+
 
     /*
     |--------------------------------------------------------------------------
