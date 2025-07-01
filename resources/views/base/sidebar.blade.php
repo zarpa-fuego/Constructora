@@ -19,7 +19,7 @@
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route('clientes.index')}}">
                     <i class="align-middle" data-feather="user"></i> <span
-                        class="align-middle">Ver distrito</span>
+                        class="align-middle">Gestión de clientes</span>
                 </a>
             </li>
             <!--<li class="sidebar-item">

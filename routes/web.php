@@ -51,6 +51,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/clientes/search', [ClienteController::class, 'search'])->name('clientes.search');
     Route::get('/clientes/export', [ClienteController::class, 'export'])->name('clientes.export');
+    Route::get('/clientes/export/pdf', [ClienteController::class, 'exportPdf'])->name('clientes.export.pdf');
+    Route::get('/api/geo/{distrito_id}', [ClienteController::class, 'geoInfo']);
+    Route::get('/api/provincias/{departamento_id}', function($departamento_id) {
+    return \App\Models\Provincia::where('departamento_id', $departamento_id)->get(['id', 'nombre']);
+});
+Route::get('/api/distritos/{provincia_id}', function($provincia_id) {
+    return \App\Models\Distrito::where('provincia_id', $provincia_id)->get(['id', 'nombre']);
+});
 
     /*
     |--------------------------------------------------------------------------

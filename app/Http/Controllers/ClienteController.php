@@ -6,13 +6,28 @@ use App\Models\Cliente;
 use App\Models\Distrito;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
 class ClienteController extends Controller
 {
     /**
-     * Muestra una lista de clientes con paginación y búsqueda.
+     * Devuelve la provincia y departamento según el distrito (API geográfica)
+     */
+    public function geoInfo($distrito_id)
+    {
+        $distrito = \App\Models\Distrito::with('provincia.departamento')->find($distrito_id);
+        if (!$distrito) {
+            return response()->json(['success' => false, 'message' => 'Distrito no encontrado']);
+        }
+        return response()->json([
+            'success' => true,
+            'provincia' => $distrito->provincia->nombre,
+            'departamento' => $distrito->provincia->departamento->nombre
+        ]);
+    }
+    /**
+     * Muestra una lista de clientes con paginación, búsqueda y métricas.
      */
     public function index(Request $request)
     {
@@ -42,11 +57,20 @@ class ClienteController extends Controller
         }
 
         $clientes = $query->orderBy('created_at', 'desc')->paginate(10);
-
-        // Mantener parámetros de búsqueda en la paginación
         $clientes->appends($request->query());
 
-        return view('cliente.index', compact('clientes'));
+        // MÉTRICAS
+        $totalClientes = Cliente::count();
+        // Ajusta esta línea según tu lógica de "activos"
+        $clientesActivos = Cliente::where('estado_civil', 'Casado')->count(); // Ejemplo: usa tu lógica real aquí
+        $interesadosRecientes = Cliente::where('created_at', '>=', now()->subDays(7))->count();
+
+        return view('cliente.index', compact(
+            'clientes',
+            'totalClientes',
+            'clientesActivos',
+            'interesadosRecientes'
+        ));
     }
 
     /**
@@ -54,8 +78,8 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        $distritos = \App\Models\Distrito::with('provincia')->get();
-        return view('cliente.create', compact('distritos'));
+        $departamentos = \App\Models\Departamento::all();
+    return view('cliente.create', compact('departamentos'));
     }
 
     /**
@@ -84,9 +108,7 @@ class ClienteController extends Controller
      */
     public function show(Cliente $cliente)
     {
-        // Cargar las relaciones anidadas para mostrar información completa
         $cliente->load('distrito.provincia.departamento');
-
         return view('cliente.show', compact('cliente'));
     }
 
@@ -95,8 +117,8 @@ class ClienteController extends Controller
      */
     public function edit(Cliente $cliente)
     {
-        $distritos = \App\Models\Distrito::with('provincia')->get();
-        return view('cliente.edit', compact('cliente', 'distritos'));
+        $departamentos = \App\Models\Departamento::all();
+    return view('cliente.edit', compact('cliente', 'departamentos'));
     }
 
     /**
@@ -203,57 +225,67 @@ class ClienteController extends Controller
     }
 
     /**
-     * Reglas de validación mejoradas
+     * Exportar clientes a PDF
      */
-   private function getValidationRules($cliente = null)
-{
-    $rules = [
-        'estado_civil' => 'required|string|in:Soltero,Casado,Divorciado,Viudo,Conviviente',
-        'nombre' => [
-            'required',
-            'string',
-            'max:120',
-            'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
-        ],
-        'apellido' => [
-            'required',
-            'string',
-            'max:180',
-            'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
-        ],
-           'distrito_id' => 'required|exists:distritos,id',
-        'direccion' => 'required|string|max:200',
-        'telefono' => [
-            'required',
-            'string',
-            'regex:/^[0-9]{9,11}$/'
-        ],
-        'email' => ['required', 'string', 'email', 'max:150'],
-        'dni_numero' => [
-            'required',
-            'string',
-            'regex:/^[0-9]{8}$/'
-        ],
-    ];
-
-      // Para update, ignorar el registro actual en validaciones unique
-    if ($cliente) {
-        $rules['email'][] = Rule::unique('clientes', 'email')->ignore($cliente->id);
-        $rules['dni_numero'][] = Rule::unique('clientes', 'dni_numero')->ignore($cliente->id);
-    } else {
-        $rules['email'][] = 'unique:clientes,email';
-        $rules['dni_numero'][] = 'unique:clientes,dni_numero';
+    public function exportPdf()
+    {
+        $clientes = Cliente::with('distrito.provincia.departamento')->get();
+        $pdf = Pdf::loadView('cliente.pdf', compact('clientes'));
+        return $pdf->download('clientes_' . date('Y-m-d_H-i-s') . '.pdf');
     }
 
-    return $rules;
-}
+    /**
+     * Reglas de validación mejoradas
+     */
+    private function getValidationRules($cliente = null)
+    {
+        $rules = [
+            'estado_civil' => 'required|string|in:Soltero,Casado,Divorciado,Viudo,Conviviente',
+            'nombre' => [
+                'required',
+                'string',
+                'max:120',
+                'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
+            ],
+            'apellido' => [
+                'required',
+                'string',
+                'max:180',
+                'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
+            ],
+            'distrito_id' => 'required|exists:distritos,id',
+            'direccion' => 'required|string|max:200',
+            'telefono' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{9,11}$/'
+            ],
+            'email' => ['required', 'string', 'email', 'max:150'],
+            'dni_numero' => [
+                'required',
+                'string',
+                'regex:/^[0-9]{8}$/'
+            ],
+        ];
+
+        // Para update, ignorar el registro actual en validaciones unique
+        if ($cliente) {
+            $rules['email'][] = Rule::unique('clientes', 'email')->ignore($cliente->id);
+            $rules['dni_numero'][] = Rule::unique('clientes', 'dni_numero')->ignore($cliente->id);
+        } else {
+            $rules['email'][] = 'unique:clientes,email';
+            $rules['dni_numero'][] = 'unique:clientes,dni_numero';
+        }
+
+        return $rules;
+    }
 
     /**
      * Mensajes de validación personalizados
      */
     public function messages()
     {
-        return [
+         return [
             'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
             'apellido.regex' => 'El apellido solo puede contener letras y espacios.',
             'telefono.regex' => 'El teléfono debe tener entre 9 y 11 dígitos.',

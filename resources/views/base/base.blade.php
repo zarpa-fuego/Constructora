@@ -19,7 +19,11 @@
     <!-- Llamar directamente desde public/ -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-</head>
+    <!-- Bootstrap Icons CDN -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+   <!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+   </head>
 
 <body>
 <div class="wrapper">
