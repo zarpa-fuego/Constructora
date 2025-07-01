@@ -51,3 +51,25 @@ class UbicacionSeeder extends Seeder
                 'nombre' => $distrito,
                 'provincia_id' => $provinciaLima->id
             ]);
+        }
+        foreach ($distritosLima as $distrito) {
+    Distrito::create([
+        'nombre' => $distrito,
+        'provincia_id' => $provinciaLima->id
+    ]);
+}
+
+// Agrega los distritos del Callao
+$distritosCallao = [
+    'Callao', 'Bellavista', 'Carmen de la Legua Reynoso', 'La Perla', 'La Punta', 'Ventanilla', 'Mi Perú'
+];
+
+foreach ($distritosCallao as $distrito) {
+    Distrito::create([
+        'nombre' => $distrito,
+        'provincia_id' => $provinciaCallao->id
+    ]);
+}
+      }
+
+}

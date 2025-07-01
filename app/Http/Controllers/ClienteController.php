@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Distrito;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+
 use Illuminate\Support\Facades\DB;
 
 class ClienteController extends Controller
@@ -53,14 +54,7 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        $distritos = Distrito::with('provincia.departamento')
-            ->orderBy('nombre')
-            ->get()
-            ->groupBy('provincia.departamento.nombre')
-            ->map(function ($distritos) {
-                return $distritos->groupBy('provincia.nombre');
-            });
-
+        $distritos = \App\Models\Distrito::with('provincia')->get();
         return view('cliente.create', compact('distritos'));
     }
 
@@ -101,14 +95,7 @@ class ClienteController extends Controller
      */
     public function edit(Cliente $cliente)
     {
-        $distritos = Distrito::with('provincia.departamento')
-            ->orderBy('nombre')
-            ->get()
-            ->groupBy('provincia.departamento.nombre')
-            ->map(function ($distritos) {
-                return $distritos->groupBy('provincia.nombre');
-            });
-
+        $distritos = \App\Models\Distrito::with('provincia')->get();
         return view('cliente.edit', compact('cliente', 'distritos'));
     }
 
@@ -218,48 +205,48 @@ class ClienteController extends Controller
     /**
      * Reglas de validación mejoradas
      */
-    private function getValidationRules($cliente = null)
-    {
-        $rules = [
-            'estado_civil' => 'required|string|in:Soltero,Casado,Divorciado,Viudo,Conviviente',
-            'nombre' => [
-                'required',
-                'string',
-                'max:120',
-                'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
-            ],
-            'apellido' => [
-                'required',
-                'string',
-                'max:180',
-                'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
-            ],
-            'distrito_id' => 'required|exists:distritos,id',
-            'direccion' => 'required|string|max:200',
-            'telefono' => [
-                'required',
-                'string',
-                'regex:/^[0-9]{9,11}$/'
-            ],
-            'email' => 'required|string|email|max:150',
-            'dni_numero' => [
-                'required',
-                'string',
-                'regex:/^[0-9]{8}$/'
-            ],
-        ];
+   private function getValidationRules($cliente = null)
+{
+    $rules = [
+        'estado_civil' => 'required|string|in:Soltero,Casado,Divorciado,Viudo,Conviviente',
+        'nombre' => [
+            'required',
+            'string',
+            'max:120',
+            'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
+        ],
+        'apellido' => [
+            'required',
+            'string',
+            'max:180',
+            'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'
+        ],
+           'distrito_id' => 'required|exists:distritos,id',
+        'direccion' => 'required|string|max:200',
+        'telefono' => [
+            'required',
+            'string',
+            'regex:/^[0-9]{9,11}$/'
+        ],
+        'email' => ['required', 'string', 'email', 'max:150'],
+        'dni_numero' => [
+            'required',
+            'string',
+            'regex:/^[0-9]{8}$/'
+        ],
+    ];
 
-        // Para update, ignorar el registro actual en validaciones unique
-        if ($cliente) {
-            $rules['email'][] = Rule::unique('clientes', 'email')->ignore($cliente->id);
-            $rules['dni_numero'][] = Rule::unique('clientes', 'dni_numero')->ignore($cliente->id);
-        } else {
-    $rules['email'] = ['unique:clientes,email'];
-    $rules['dni_numero'] = ['unique:clientes,dni_numero'];
-}
-
-        return $rules;
+      // Para update, ignorar el registro actual en validaciones unique
+    if ($cliente) {
+        $rules['email'][] = Rule::unique('clientes', 'email')->ignore($cliente->id);
+        $rules['dni_numero'][] = Rule::unique('clientes', 'dni_numero')->ignore($cliente->id);
+    } else {
+        $rules['email'][] = 'unique:clientes,email';
+        $rules['dni_numero'][] = 'unique:clientes,dni_numero';
     }
+
+    return $rules;
+}
 
     /**
      * Mensajes de validación personalizados

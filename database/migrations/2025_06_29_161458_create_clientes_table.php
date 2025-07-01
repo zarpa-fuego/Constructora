@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clientes', function (Blueprint $table) {
-            $table->id(); // id_cliente
-            $table->string('estado_civil', 10);
+            $table->id();
+            $table->string('estado_civil', 25);
             $table->string('nombre', 120);
             $table->string('apellido', 180);
-            $table->foreignId('distrito_id')->constrained('distritos')->onDelete('cascade'); // FK a distrito, añadido onDelete
+            $table->foreignId('distrito_id')->constrained('distritos')->onDelete('cascade');
             $table->string('direccion', 200);
             $table->string('telefono', 11);
             $table->string('email', 150)->unique();

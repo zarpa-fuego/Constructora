@@ -104,18 +104,18 @@
 
                         <div class="mb-3">
                             <label for="distrito_id" class="form-label">Distrito *</label>
+
+
                             <select class="form-control @error('distrito_id') is-invalid @enderror"
-                                    id="distrito_id" name="distrito_id" required>
-                                <option value="">Seleccione un distrito</option>
-                                @foreach ($distritos as $distrito)
-                                    <optgroup label="{{ $distrito->provincia->departamento->nombre }} - {{ $distrito->provincia->nombre }}">
-                                        <option value="{{ $distrito->id }}"
-                                                {{ old('distrito_id', $cliente->distrito_id) == $distrito->id ? 'selected' : '' }}>
-                                            {{ $distrito->nombre }}
-                                        </option>
-                                    </optgroup>
-                                @endforeach
-                            </select>
+          id="distrito_id" name="distrito_id" required>
+          <option value="">Seleccione un distrito</option>
+          @foreach ($distritos as $distrito)
+             <option value="{{ $distrito->id }}"
+            {{ old('distrito_id', $cliente->distrito_id) == $distrito->id ? 'selected' : '' }}>
+            {{ $distrito->provincia->nombre }} - {{ $distrito->nombre }}
+        </option>
+         @endforeach
+        </select>
                             @error('distrito_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

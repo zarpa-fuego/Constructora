@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/clientes/{cliente}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
 
     Route::get('/clientes/search', [ClienteController::class, 'search'])->name('clientes.search');
-Route::get('/clientes/export', [ClienteController::class, 'export'])->name('clientes.export');
+    Route::get('/clientes/export', [ClienteController::class, 'export'])->name('clientes.export');
 
     /*
     |--------------------------------------------------------------------------
