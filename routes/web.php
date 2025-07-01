@@ -34,8 +34,8 @@ Route::middleware('auth')->group(function () {
     | Gestión de Clientes
     |--------------------------------------------------------------------------
     */
-    Route::get('/clientes', function () {
-        return view('clientes.gestionar');
+    Route::get('/clientes', function    () {
+        return view('cliente.index');
     })->name('gestionar_clientes');
 
     /*
@@ -82,6 +82,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/informes', function () {
         return view('informes.panel');
     })->name('panel_informes');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cajeras
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/cajeras', function () {
+        return view('cajera.index');
+    })->name('gestionar_cajeras');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

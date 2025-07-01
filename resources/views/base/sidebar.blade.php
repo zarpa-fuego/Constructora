@@ -12,27 +12,34 @@
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route('welcome')}}">
                     <i class="align-middle" data-feather="sliders"></i> <span
-                        class="align-middle">Gestión de Lotes</span>
+                        class="align-middle">Gestión de Proyectos</span>
                 </a>
             </li>
 
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route('gestionar_clientes')}}">
                     <i class="align-middle" data-feather="user"></i> <span
-                        class="align-middle">Gestión de Clientes</span>
+                        class="align-middle">Ver distrito</span>
                 </a>
             </li>
-            <li class="sidebar-item">
+            <!--<li class="sidebar-item">
                 <a class="sidebar-link" href="{{route('proyecto_listar')}}">
                     <i class="align-middle" data-feather="user"></i> <span
                         class="align-middle">Gestión de Proyectos</span>
                 </a>
             </li>
-
+            -->
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{route('gestionar_reservas')}}">
                     <i class="align-middle" data-feather="log-in"></i> <span
                         class="align-middle">Gestión de Reservas</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{route('gestionar_cajeras')}}">
+                    <i class="align-middle" data-feather="user"></i> <span
+                        class="align-middle">Gestión de Cajeros</span>
                 </a>
             </li>
 
@@ -54,6 +61,13 @@
                 <a class="sidebar-link" href="{{route('gestionar_usuarios')}}">
                     <i class="align-middle" data-feather="square"></i> <span
                         class="align-middle">Gestión de Usuarios</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{route('gestionar_usuarios')}}">
+                    <i class="align-middle" data-feather="square"></i> <span
+                        class="align-middle">Gestión de Agentes</span>
                 </a>
             </li>
 
