@@ -16,6 +16,7 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="puzzle-piece" :href="route('terrenos')" :current="request()->routeIs('terrenos')" wire:navigate>{{ __('Registro de lotes') }}</flux:navlist.item>
                     <flux:navlist.item icon="currency-dollar" :href="route('contratos')" :current="request()->routeIs('contratos')" wire:navigate>{{ __('Registro de Ventas') }}</flux:navlist.item>
+                    <flux:navlist.item icon="user" :href="route('visitas')" :current="request()->routeIs('visitas')" wire:navigate>{{ __('Registro de Visitas') }}</flux:navlist.item>
 
 
                 </flux:navlist.group>
@@ -132,5 +133,6 @@
         {{ $slot }}
 
         @fluxScripts
+        @stack('js')
     </body>
 </html>

@@ -21,6 +21,8 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
     Route::get('terrenos',RegistroMain::class)->name('terrenos');
     Route::get('contratos',RegistrodeVenMain::class)->name('contratos');
+    Route::get('visitas', \App\Livewire\VisitasMain::class)->name('visitas');
+    Route::get('/registrode-ventas', RegistrodeVenMain::class)->name('registrode-ventas');
 
 });
 
