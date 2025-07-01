@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UbicacionSeeder::class,  // Primero las ubicaciones
             ClienteSeeder::class,    // Después los clientes
-            UserSeeder::class,       // <-- Agrega aquí tu UserSeeder
+            UserSeeder::class,
         ]);
 
         $this->command->info('✅ Base de datos poblada exitosamente');
